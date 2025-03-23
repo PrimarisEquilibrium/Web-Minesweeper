@@ -6,6 +6,15 @@ class Cell {
     constructor(value) {
         this.value = value
         this.cellDiv = this.initializeDOM()
+        this.activated = false
+    }
+
+    activateCell() {
+        if (!this.activated) {
+            this.cellDiv.textContent = this.value
+            this.cellDiv.classList.toggle("clicked")
+            this.activated = true
+        }
     }
 
     /**
@@ -18,7 +27,7 @@ class Cell {
             cellDiv.classList.add("bomb")
         }
         cellDiv.addEventListener("click", () => {
-            this.cellDiv.classList.toggle("clicked")
+            this.activateCell()
         })
         return cellDiv
     }
@@ -66,7 +75,7 @@ class Board {
      */
     generateBombPositions() {
         // Bomb positions generated are guaranteed to be unique
-        let bombSet = new Set()
+        const bombSet = new Set()
         while (bombSet.size < this.bombCount) {
             const randomRow = getRandomIntInclusive(0, this.width - 1)
             const randomCol = getRandomIntInclusive(0, this.height - 1)
@@ -110,6 +119,9 @@ class Board {
         }
     }
 
+    /**
+     * For each cell, determines how many bombs it is adjacent to.
+     */
     generateCellValues() {
         const directions = [
             [-1, -1],
@@ -123,14 +135,13 @@ class Board {
         ];
         for (let row = 0; row < this.height; row++) {
             for (let col = 0; col < this.width; col++) {
-                let bombCount = 0
                 let cell = this.cellArray[row][col]
-                if (cell.value == "bomb") {
-                    continue
-                }
-                for (const direction of directions) {
-                    const newRow = row + direction[0]
-                    const newCol = col + direction[1]
+                if (cell.value == "bomb") continue
+
+                let bombCount = 0
+                for (const [drow, dcol] of directions) {
+                    const newRow = row + drow
+                    const newCol = col + dcol
                     if (newRow >= 0 && newRow < this.height
                         && newCol >= 0 && newCol < this.width
                     ) {
@@ -140,7 +151,7 @@ class Board {
                         }
                     }
                 }
-                cell.cellDiv.textContent = bombCount
+                cell.value = bombCount
             }
         }
     }

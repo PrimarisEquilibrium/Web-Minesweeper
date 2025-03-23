@@ -8,19 +8,25 @@ body {
 }
 
 .cell {
-    width: 2em;
-    height: 2em;
+    width: 2.5em;
+    height: 2.5em;
     background-color: lightgray;
     border-style: outset;
     border-width: 0.35em;
     transition: opacity 0.1s;
     color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    color: lightgray;
 }
 
 .cell.clicked {
-    background-color: gray;
+    background-color: rgb(188, 188, 188);
     border-style: none;
     border: 0.1em solid darkgray;
+    color: blue;
 }
 
 .cell.bomb {
