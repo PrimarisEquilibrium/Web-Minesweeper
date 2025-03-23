@@ -8,8 +8,8 @@ body {
 }
 
 .cell {
-    width: 3em;
-    height: 3em;
+    width: 2em;
+    height: 2em;
     background-color: lightgray;
     border-style: outset;
     border-width: 0.35em;
@@ -20,6 +20,10 @@ body {
     background-color: gray;
     border-style: none;
     border: 0.1em solid darkgray;
+}
+
+.row {
+    display: flex;
 }
 
 .cell:hover {
