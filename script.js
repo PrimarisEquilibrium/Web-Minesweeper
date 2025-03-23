@@ -48,6 +48,7 @@ class Board {
         // Initialize & generate cells
         this.cellArray = this.initializeCellArray()
         this.generateCellDOM()
+        this.generateCellValues()
     }
 
     /**
@@ -106,6 +107,41 @@ class Board {
                 rowDiv.appendChild(cell.cellDiv)
             }
             this.boardDiv.appendChild(rowDiv)
+        }
+    }
+
+    generateCellValues() {
+        const directions = [
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [0, -1],
+            [0, 1],
+            [1, -1],
+            [1, 0],
+            [1, 1]
+        ];
+        for (let row = 0; row < this.height; row++) {
+            for (let col = 0; col < this.width; col++) {
+                let bombCount = 0
+                let cell = this.cellArray[row][col]
+                if (cell.value == "bomb") {
+                    continue
+                }
+                for (const direction of directions) {
+                    const newRow = row + direction[0]
+                    const newCol = col + direction[1]
+                    if (newRow >= 0 && newRow < this.height
+                        && newCol >= 0 && newCol < this.width
+                    ) {
+                        const newCell = this.cellArray[newRow][newCol]
+                        if (newCell.value == "bomb") {
+                            bombCount++
+                        }
+                    }
+                }
+                cell.cellDiv.textContent = bombCount
+            }
         }
     }
 }
