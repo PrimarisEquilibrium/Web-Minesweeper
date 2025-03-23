@@ -1,10 +1,33 @@
+// 8-way direction
+const allDirections = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1]
+];
+
+// 4-way direction
+const cardinalDirections = [
+    [-1, 0],  // North
+    [0, -1],   // West
+    [0, 1],    // East
+    [1, 0]     // South
+];
+
 /**
  * Represents a minesweeper cell
  * Value can either be null, numerical, or "bomb"
  */
 class Cell {
-    constructor(value) {
+    constructor(value, row, col, board) {
         this.value = value
+        this.row = row
+        this.col = col
+        this.board = board
         this.cellDiv = this.initializeDOM()
         this.activated = false
     }
@@ -12,6 +35,9 @@ class Cell {
     activateCell() {
         if (!this.activated) {
             this.cellDiv.textContent = this.value
+            if (this.value == 0) {
+                this.cellDiv.textContent = ""
+            }
             this.cellDiv.classList.toggle("clicked")
             this.activated = true
         }
@@ -27,6 +53,7 @@ class Cell {
             cellDiv.classList.add("bomb")
         }
         cellDiv.addEventListener("click", () => {
+            this.board.floodFill(this)
             this.activateCell()
         })
         return cellDiv
@@ -97,7 +124,7 @@ class Board {
                 if (this.bombPositions.has(`${row},${col}`)) {
                     cellValue = "bomb"
                 }
-                rowArray.push(new Cell(cellValue))
+                rowArray.push(new Cell(cellValue, row, col, this))
             }
             cellArray.push(rowArray)
         }
@@ -123,23 +150,13 @@ class Board {
      * For each cell, determines how many bombs it is adjacent to.
      */
     generateCellValues() {
-        const directions = [
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, -1],
-            [0, 1],
-            [1, -1],
-            [1, 0],
-            [1, 1]
-        ];
         for (let row = 0; row < this.height; row++) {
             for (let col = 0; col < this.width; col++) {
                 let cell = this.cellArray[row][col]
                 if (cell.value == "bomb") continue
 
                 let bombCount = 0
-                for (const [drow, dcol] of directions) {
+                for (const [drow, dcol] of allDirections) {
                     const newRow = row + drow
                     const newCol = col + dcol
                     if (newRow >= 0 && newRow < this.height
@@ -155,6 +172,31 @@ class Board {
             }
         }
     }
+
+    /**
+     * Recursively activates neighboring 0 cells.
+     * @param {Cell} cell The initial cell.
+     */
+    floodFill(cell) {
+        if (cell.activated) return;
+        
+        cell.activateCell()
+    
+        if (cell.value !== 0) return;
+    
+        for (const [drow, dcol] of cardinalDirections) {
+            const newRow = cell.row + drow;
+            const newCol = cell.col + dcol;
+    
+            if (newRow >= 0 && newRow < this.height && newCol >= 0 && newCol < this.width) {
+                const newCell = this.cellArray[newRow][newCol];
+    
+                if (!newCell.activated && newCell.value !== "bomb") {
+                    this.floodFill(newCell);
+                }
+            }
+        }
+    }    
 }
 
-let board = new Board(10, 10, 10)
+let board = new Board(16, 16, 40)
