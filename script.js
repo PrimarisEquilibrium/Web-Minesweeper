@@ -9,7 +9,7 @@ class Cell {
         this.cellDiv = document.createElement("div")
         this.cellDiv.classList.add("cell")
         this.cellDiv.addEventListener("click", () => {
-            cellDiv.classList.toggle("clicked")
+            this.cellDiv.classList.toggle("clicked")
         })
     }
 }
@@ -30,6 +30,11 @@ class Board {
         this.cellArray = this.initializeCellArray()
     }
 
+    /**
+     * Initializes a (width x height) cell array
+     * and creates & appends Cell DOM elements.
+     * @returns A cell array of dimensions (width x height).
+     */
     initializeCellArray() {
         let cellArray = []
         for (let i = 0; i < this.height; i++) {
