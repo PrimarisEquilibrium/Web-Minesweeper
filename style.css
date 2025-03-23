@@ -6,3 +6,22 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.cell {
+    width: 3em;
+    height: 3em;
+    background-color: lightgray;
+    border-style: outset;
+    border-width: 0.35em;
+    transition: opacity 0.1s;
+}
+
+.cell.clicked {
+    background-color: gray;
+    border-style: none;
+    border: 0.1em solid darkgray;
+}
+
+.cell:hover {
+    opacity: 0.9;
+}
