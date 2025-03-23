@@ -14,6 +14,9 @@ class Cell {
     initializeDOM() {
         const cellDiv = document.createElement("div")
         cellDiv.classList.add("cell")
+        if (this.value == "bomb") {
+            cellDiv.classList.add("bomb")
+        }
         cellDiv.addEventListener("click", () => {
             this.cellDiv.classList.toggle("clicked")
         })
@@ -40,8 +43,8 @@ class Board {
         this.boardDiv = this.initializeDOM()
         document.body.appendChild(this.boardDiv)
 
+        this.bombPositions = this.generateBombPositions()
         this.cellArray = this.initializeCellArray()
-        console.log(this.generateBombPositions())
     }
 
     /**
@@ -63,7 +66,7 @@ class Board {
         while (bombSet.size < this.bombCount) {
             const randomRow = getRandomIntInclusive(0, this.width - 1)
             const randomCol = getRandomIntInclusive(0, this.height - 1)
-            bombSet.add({row: randomRow, col: randomCol})
+            bombSet.add(`${randomRow},${randomCol}`)
         }
         return bombSet
     }
@@ -75,12 +78,17 @@ class Board {
      */
     initializeCellArray() {
         let cellArray = []
-        for (let i = 0; i < this.height; i++) {
+        for (let rowCount = 0; rowCount < this.height; rowCount++) {
             const row = document.createElement("div")
             let rowArray = []
             row.classList.add("row")
-            for (let j = 0; j < this.width; j++) {
-                const cell = new Cell(0)
+            for (let colCount = 0; colCount < this.width; colCount++) {
+                let cellValue = 0
+                console.log(this.bombPositions)
+                if (this.bombPositions.has(`${rowCount},${colCount}`)) {
+                    cellValue = "bomb"
+                }
+                const cell = new Cell(cellValue)
                 row.appendChild(cell.cellDiv)
                 rowArray.push(cell)
             }

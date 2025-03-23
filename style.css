@@ -22,6 +22,10 @@ body {
     border: 0.1em solid darkgray;
 }
 
+.cell.bomb {
+    background-color: red;
+}
+
 .row {
     display: flex;
 }
