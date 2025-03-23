@@ -1,16 +1,23 @@
 /**
  * Represents a minesweeper cell
+ * Value can either be null, numerical, or "bomb"
  */
 class Cell {
     constructor(value) {
         this.value = value
+        this.cellDiv = this.initializeDOM()
+    }
 
-        // Initialize cell DOM
-        this.cellDiv = document.createElement("div")
-        this.cellDiv.classList.add("cell")
-        this.cellDiv.addEventListener("click", () => {
+    /**
+     * Initializes the cell DOM.
+     */
+    initializeDOM() {
+        const cellDiv = document.createElement("div")
+        cellDiv.classList.add("cell")
+        cellDiv.addEventListener("click", () => {
             this.cellDiv.classList.toggle("clicked")
         })
+        return cellDiv
     }
 }
 
@@ -18,16 +25,24 @@ class Cell {
  * Represents a minesweeper board (width x height)
  */
 class Board {
-    constructor(width, height) {
+    constructor(width, height, bombCount) {
         this.width = width
         this.height = height
         
-        // Initialize board DOM
-        this.boardDiv = document.createElement("div")
-        this.boardDiv.classList.add("board")
+        // Any code using the board
+        this.boardDiv = this.initializeDOM()
         document.body.appendChild(this.boardDiv)
 
         this.cellArray = this.initializeCellArray()
+    }
+
+    /**
+     * Initialize the board DOM element.
+     */
+    initializeDOM() {
+        const boardDiv = document.createElement("div")
+        boardDiv.classList.add("board")
+        return boardDiv
     }
 
     /**
