@@ -21,6 +21,12 @@ class Cell {
     }
 }
 
+function getRandomIntInclusive(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+  }
+
 /**
  * Represents a minesweeper board (width x height)
  */
@@ -28,12 +34,14 @@ class Board {
     constructor(width, height, bombCount) {
         this.width = width
         this.height = height
+        this.bombCount = bombCount
         
         // Any code using the board
         this.boardDiv = this.initializeDOM()
         document.body.appendChild(this.boardDiv)
 
         this.cellArray = this.initializeCellArray()
+        console.log(this.generateBombPositions())
     }
 
     /**
@@ -46,6 +54,21 @@ class Board {
     }
 
     /**
+     * Randomly generates a bombCount amount of bomb positions.
+     * @returns A set of bomb positions.
+     */
+    generateBombPositions() {
+        // Bomb positions generated are guaranteed to be unique
+        let bombSet = new Set()
+        while (bombSet.size < this.bombCount) {
+            const randomRow = getRandomIntInclusive(0, this.width - 1)
+            const randomCol = getRandomIntInclusive(0, this.height - 1)
+            bombSet.add({row: randomRow, col: randomCol})
+        }
+        return bombSet
+    }
+
+    /**
      * Initializes a (width x height) cell array
      * and creates & appends Cell DOM elements.
      * @returns A cell array of dimensions (width x height).
@@ -54,16 +77,18 @@ class Board {
         let cellArray = []
         for (let i = 0; i < this.height; i++) {
             const row = document.createElement("div")
+            let rowArray = []
             row.classList.add("row")
             for (let j = 0; j < this.width; j++) {
                 const cell = new Cell(0)
                 row.appendChild(cell.cellDiv)
-                cellArray.push(cell)
+                rowArray.push(cell)
             }
             this.boardDiv.appendChild(row)
+            cellArray.push(rowArray)
         }
         return cellArray
     }
 }
 
-let board = new Board(10, 10)
+let board = new Board(10, 10, 10)
