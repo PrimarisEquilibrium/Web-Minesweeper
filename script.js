@@ -39,12 +39,15 @@ class Board {
         this.height = height
         this.bombCount = bombCount
         
-        // Any code using the board
+        // Create the board DOM
         this.boardDiv = this.initializeDOM()
         document.body.appendChild(this.boardDiv)
 
         this.bombPositions = this.generateBombPositions()
+
+        // Initialize & generate cells
         this.cellArray = this.initializeCellArray()
+        this.generateCellDOM()
     }
 
     /**
@@ -72,30 +75,38 @@ class Board {
     }
 
     /**
-     * Initializes a (width x height) cell array
-     * and creates & appends Cell DOM elements.
+     * Initializes a (width x height) cell array.
      * @returns A cell array of dimensions (width x height).
      */
     initializeCellArray() {
         let cellArray = []
-        for (let rowCount = 0; rowCount < this.height; rowCount++) {
-            const row = document.createElement("div")
+        for (let row = 0; row < this.height; row++) {
             let rowArray = []
-            row.classList.add("row")
-            for (let colCount = 0; colCount < this.width; colCount++) {
-                let cellValue = 0
-                console.log(this.bombPositions)
-                if (this.bombPositions.has(`${rowCount},${colCount}`)) {
+            for (let col = 0; col < this.width; col++) {
+                let cellValue = null
+                if (this.bombPositions.has(`${row},${col}`)) {
                     cellValue = "bomb"
                 }
-                const cell = new Cell(cellValue)
-                row.appendChild(cell.cellDiv)
-                rowArray.push(cell)
+                rowArray.push(new Cell(cellValue))
             }
-            this.boardDiv.appendChild(row)
             cellArray.push(rowArray)
         }
         return cellArray
+    }
+
+    /**
+     * Appends the Cell DOM from cell array to the Board DOM.
+     */
+    generateCellDOM() {
+        for (let row = 0; row < this.height; row++) {
+            const rowDiv = document.createElement("div")
+            rowDiv.classList.add("row")
+            for (let col = 0; col < this.width; col++) {
+                const cell = this.cellArray[row][col]
+                rowDiv.appendChild(cell.cellDiv)
+            }
+            this.boardDiv.appendChild(rowDiv)
+        }
     }
 }
 
