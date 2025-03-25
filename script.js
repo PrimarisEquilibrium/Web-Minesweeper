@@ -63,7 +63,9 @@ class Cell {
                 this.cellDiv.classList.toggle("flag")
                 this.flagged = !this.flagged
                 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
-
+                if (board.hasWon()) {
+                    alert("You won!")
+                }
             } else {
                 this.board.floodFill(this)
                 this.activateCell()
@@ -73,6 +75,12 @@ class Cell {
     }
 }
 
+/**
+ * Generates a random integer inclusively
+ * @param {*} min The minimum value (inclusive).
+ * @param {*} max The maximum value (inclusive).
+ * @returns The random integer.
+ */
 function getRandomIntInclusive(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -214,8 +222,24 @@ class Board {
         }
     }
 
+    /**
+     * Determines if the game has been won.
+     * @returns True if the game has been won; otherwise False.
+     */
+    hasWon() {
+        if (this.bombCount - this.flagCount !== 0) return false
 
+        for (let row = 0; row < this.height; row++) {
+            for (let col = 0; col < this.width; col++) {
+                const cell = this.cellArray[row][col]
+                if (cell.flagged && cell.value !== "bomb") {
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }
 
 document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
-let board = new Board(16, 16, 40)
+let board = new Board(16, 16, 1)
