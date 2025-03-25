@@ -75,6 +75,8 @@ class Board {
         this.height = height
         this.bombCount = bombCount
         
+        document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.bombCount}`
+        
         // Create the board DOM
         this.boardDiv = this.initializeDOM()
         document.body.appendChild(this.boardDiv)
