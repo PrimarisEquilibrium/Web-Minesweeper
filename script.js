@@ -35,6 +35,9 @@ class Cell {
 
     activateCell() {
         if (!this.activated && !this.flagged) {
+            if (this.value == "bomb") {
+                document.getElementById("win-status").textContent = "You lost!"
+            }
             this.cellDiv.textContent = this.value
             if (this.value == 0) {
                 this.cellDiv.textContent = ""
@@ -50,10 +53,17 @@ class Cell {
     initializeDOM() {
         const cellDiv = document.createElement("div")
         cellDiv.classList.add("cell")
-        if (this.value == "bomb") {
-            cellDiv.classList.add("bomb")
-        }
         cellDiv.addEventListener("mousedown", (e) => {
+            // Stop the "game" (input) by not reacting to inputs
+            if (this.board.gameOver) return
+
+            // Display all bombs and toggle gameover when bomb is clicked
+            if (this.value == "bomb") {
+                this.board.displayBombs()
+                this.board.gameOver = true
+            }
+
+            // On right click
             if ((e.which === 3 || e.button === 2) && !this.activated) {
                 if (this.cellDiv.classList.contains("flag")) {
                     this.board.flagCount--
@@ -66,6 +76,7 @@ class Cell {
                 if (board.hasWon()) {
                     alert("You won!")
                 }
+            // On left click
             } else {
                 this.board.floodFill(this)
                 this.activateCell()
@@ -96,6 +107,7 @@ class Board {
         this.height = height
         this.bombCount = bombCount
         this.flagCount = 0
+        this.gameOver = false
 
         document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.bombCount}`
         
@@ -239,7 +251,18 @@ class Board {
         }
         return true
     }
+
+    displayBombs() {
+        for (let row = 0; row < this.height; row++) {
+            for (let col = 0; col < this.width; col++) {
+                const cell = this.cellArray[row][col]
+                if (cell.value == "bomb") {
+                    cell.activateCell()
+                }
+            }
+        }
+    }
 }
 
 document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
-let board = new Board(16, 16, 1)
+let board = new Board(9, 9, 10)
