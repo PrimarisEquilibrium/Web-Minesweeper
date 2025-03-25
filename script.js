@@ -33,7 +33,7 @@ class Cell {
     }
 
     activateCell() {
-        if (!this.activated) {
+        if (!this.activated && !this.cellDiv.classList.contains("flag")) {
             this.cellDiv.textContent = this.value
             if (this.value == 0) {
                 this.cellDiv.textContent = ""
@@ -53,9 +53,13 @@ class Cell {
             cellDiv.classList.add("bomb")
         }
         cellDiv.addEventListener("mousedown", (e) => {
-            if (e.which === 3 || e.button === 2) {
-                this.cellDiv.classList.add("flag")
-                this.board.flagCount += 1
+            if ((e.which === 3 || e.button === 2) && !this.activated) {
+                if (this.cellDiv.classList.contains("flag")) {
+                    this.board.flagCount--
+                } else {
+                    this.board.flagCount++
+                }
+                this.cellDiv.classList.toggle("flag")
                 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
 
             } else {
