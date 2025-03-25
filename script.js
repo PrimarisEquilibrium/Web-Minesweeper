@@ -30,10 +30,11 @@ class Cell {
         this.board = board
         this.cellDiv = this.initializeDOM()
         this.activated = false
+        this.flagged = false
     }
 
     activateCell() {
-        if (!this.activated && !this.cellDiv.classList.contains("flag")) {
+        if (!this.activated && !this.flagged) {
             this.cellDiv.textContent = this.value
             if (this.value == 0) {
                 this.cellDiv.textContent = ""
@@ -60,6 +61,7 @@ class Cell {
                     this.board.flagCount++
                 }
                 this.cellDiv.classList.toggle("flag")
+                this.flagged = !this.flagged
                 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
 
             } else {
@@ -210,7 +212,9 @@ class Board {
                 }
             }
         }
-    }    
+    }
+
+
 }
 
 document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
