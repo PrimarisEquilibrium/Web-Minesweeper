@@ -252,6 +252,9 @@ class Board {
         return true
     }
 
+    /**
+     * Activates all the bombs (reveals them to the player).
+     */
     displayBombs() {
         for (let row = 0; row < this.height; row++) {
             for (let col = 0; col < this.width; col++) {
@@ -262,7 +265,20 @@ class Board {
             }
         }
     }
+
+    /**
+     * Deletes the boardDiv element.
+     */
+    clearBoard() {
+        this.boardDiv.remove()
+    }
 }
 
 document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
+const resetButton = document.getElementById("reset-btn")
+
 let board = new Board(9, 9, 10)
+resetButton.addEventListener("click", () => {
+    board.clearBoard()
+    board = new Board(9, 9, 10)
+})
