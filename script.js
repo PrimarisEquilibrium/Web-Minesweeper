@@ -278,15 +278,23 @@ document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault(
 const resetButton = document.getElementById("reset-btn")
 
 let board = new Board(9, 9, 10)
-resetButton.addEventListener("click", () => {
-    board.clearBoard()
-    board = new Board(9, 9, 10)
-})
 
 const time = document.getElementById("time")
 let seconds = 0
 time.textContent = `Time: ${seconds}`
-setInterval(() => {
+let timer = setInterval(() => {
     seconds++
     time.textContent = `Time: ${seconds}`
 }, 1000)
+
+resetButton.addEventListener("click", () => {
+    board.clearBoard()
+    board = new Board(9, 9, 10)
+    seconds = 0
+    time.textContent = `Time: 0`
+    clearInterval(timer)
+    timer = setInterval(() => {
+        seconds++
+        time.textContent = `Time: ${seconds}`
+    }, 1000)
+})
