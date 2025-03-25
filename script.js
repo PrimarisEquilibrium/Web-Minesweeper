@@ -282,3 +282,11 @@ resetButton.addEventListener("click", () => {
     board.clearBoard()
     board = new Board(9, 9, 10)
 })
+
+const time = document.getElementById("time")
+let seconds = 0
+time.textContent = `Time: ${seconds}`
+setInterval(() => {
+    seconds++
+    time.textContent = `Time: ${seconds}`
+}, 1000)
