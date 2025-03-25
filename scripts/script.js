@@ -1,22 +1,5 @@
-// 8-way direction
-const allDirections = [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, -1],
-    [0, 1],
-    [1, -1],
-    [1, 0],
-    [1, 1]
-];
-
-// 4-way direction
-const cardinalDirections = [
-    [-1, 0],  // North
-    [0, -1],   // West
-    [0, 1],    // East
-    [1, 0]     // South
-];
+import { allDirections, cardinalDirections } from "./constants.js"
+import { getRandomIntInclusive } from "./utils.js"
 
 /**
  * Represents a minesweeper cell
@@ -85,18 +68,6 @@ class Cell {
         return cellDiv
     }
 }
-
-/**
- * Generates a random integer inclusively
- * @param {*} min The minimum value (inclusive).
- * @param {*} max The maximum value (inclusive).
- * @returns The random integer.
- */
-function getRandomIntInclusive(min, max) {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-  }
 
 /**
  * Represents a minesweeper board (width x height)
