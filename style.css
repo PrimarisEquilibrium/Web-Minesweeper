@@ -33,6 +33,10 @@ body {
     background-color: red;
 }
 
+.cell.flag {
+    background-color: green;
+}
+
 .row {
     display: flex;
 }

@@ -52,9 +52,16 @@ class Cell {
         if (this.value == "bomb") {
             cellDiv.classList.add("bomb")
         }
-        cellDiv.addEventListener("click", () => {
-            this.board.floodFill(this)
-            this.activateCell()
+        cellDiv.addEventListener("mousedown", (e) => {
+            if (e.which === 3 || e.button === 2) {
+                this.cellDiv.classList.add("flag")
+                this.board.flagCount += 1
+                document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
+
+            } else {
+                this.board.floodFill(this)
+                this.activateCell()
+            }
         })
         return cellDiv
     }
@@ -74,7 +81,8 @@ class Board {
         this.width = width
         this.height = height
         this.bombCount = bombCount
-        
+        this.flagCount = 0
+
         document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.bombCount}`
         
         // Create the board DOM
@@ -201,4 +209,5 @@ class Board {
     }    
 }
 
+document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
 let board = new Board(16, 16, 40)
