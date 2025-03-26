@@ -284,10 +284,69 @@ class Board {
     }
 }
 
+class NumberBox {
+    constructor(value) {
+        this.value = value
+        this.initializeDOM()
+        this.update()
+    }
+
+    initializeDOM() {
+        const container = document.createElement("div");
+        container.style.background = "black";
+        container.style.display = "inline-flex";
+        container.style.gap = "8px";
+        container.style.padding = "4px";
+        container.style.width = "fit-content";
+        container.style.height = "fit-content";
+        
+        this.hundreds = document.createElement("img")
+        this.hundreds.src = "./public/images/t0.svg"
+        container.appendChild(this.hundreds)
+
+        this.tens = document.createElement("img")
+        this.tens.src = "./public/images/t0.svg"
+        container.appendChild(this.tens)
+
+        this.ones = document.createElement("img")
+        this.ones.src = "./public/images/t0.svg"
+        container.appendChild(this.ones)
+
+        document.body.appendChild(container)
+    }
+
+    getDigits(num) {
+        const ones = num % 10;
+        const tens = Math.floor((num % 100) / 10);
+        const hundreds = Math.floor((num % 1000) / 100);
+        
+        return { hundreds, tens, ones };
+    }
+
+    update() {
+        const { hundreds, tens, ones } = this.getDigits(this.value)
+        this.hundreds.src = `/public/images/t${hundreds}.svg`
+        this.tens.src = `/public/images/t${tens}.svg`
+        this.ones.src = `/public/images/t${ones}.svg`
+    }
+
+    increment() {
+        this.value++
+        this.update()
+    }
+
+    decrement() {
+        this.value--
+        this.update()
+    }
+}
+
 document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
 const resetButton = document.getElementById("reset-btn")
 
 let board = new Board(9, 9, 10)
+const bombRemainingBox = new NumberBox(10)
+const timerBox = new NumberBox(0)
 
 // Initialize default bomb count
 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${board.bombCount}`
