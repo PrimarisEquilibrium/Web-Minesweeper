@@ -18,12 +18,46 @@ class Cell {
 
     activateCell() {
         if (!this.activated && !this.flagged) {
-            if (this.value == "bomb") {
-                document.getElementById("win-status").textContent = "You lost!"
-            }
             this.cellDiv.textContent = this.value
-            if (this.value == 0) {
-                this.cellDiv.textContent = ""
+            switch (this.value) {
+                case "bomb":
+                    this.cellDiv.textContent = ""
+                    break;
+                case 0:
+                    this.cellDiv.textContent = ""
+                    break;
+                case 1:
+                    this.cellDiv.style.color = "#0201FF"
+                    break;
+                case 2:
+                    this.cellDiv.style.color = "#008601"
+                    break;
+                case 3:
+                    this.cellDiv.style.color = "#FE0100"
+                    break;
+                case 4:
+                    this.cellDiv.style.color = "#010085"
+                    break;
+                case 5:
+                    this.cellDiv.style.color = "#840100"
+                    break;
+                case 6:
+                    this.cellDiv.style.color = "#058284"
+                    break;
+                case 7:
+                    this.cellDiv.style.color = "#840183"
+                    break;
+                case 8:
+                    this.cellDiv.style.color = "#777"
+                    break;
+            }
+            if (this.value == "bomb") {
+                const bombImg = document.createElement("img")
+                bombImg.src = "./public/images/bomb.png"
+                bombImg.height = 20
+                bombImg.width = 20
+                this.cellDiv.appendChild(bombImg)
+                this.cellDiv.style.background = "red"
             }
             this.cellDiv.classList.toggle("clicked")
             this.activated = true
@@ -42,6 +76,7 @@ class Cell {
 
             // Display all bombs and toggle gameover when bomb is clicked
             if (this.value == "bomb") {
+                document.getElementById("win-status").textContent = "You lost!"
                 this.board.displayBombs()
                 this.board.gameOver = true
             }
@@ -79,8 +114,6 @@ class Board {
         this.bombCount = bombCount
         this.flagCount = 0
         this.gameOver = false
-
-        document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.bombCount}`
         
         // Create the board DOM
         this.boardDiv = this.initializeDOM()
@@ -250,6 +283,10 @@ const resetButton = document.getElementById("reset-btn")
 
 let board = new Board(9, 9, 10)
 
+// Initialize default bomb count
+document.getElementById("bomb-count").textContent = `Bombs Remaining: ${board.bombCount}`
+
+// Setup timer
 const time = document.getElementById("time")
 let seconds = 0
 time.textContent = `Time: ${seconds}`
@@ -259,8 +296,11 @@ let timer = setInterval(() => {
 }, 1000)
 
 resetButton.addEventListener("click", () => {
+    // Reset board
     board.clearBoard()
     board = new Board(9, 9, 10)
+
+    // Reset timer
     seconds = 0
     time.textContent = `Time: 0`
     clearInterval(timer)
@@ -268,4 +308,7 @@ resetButton.addEventListener("click", () => {
         seconds++
         time.textContent = `Time: ${seconds}`
     }, 1000)
-})
+
+    // Hide "you lost" text if user lost
+    document.getElementById("win-status").textContent = ""
+})  

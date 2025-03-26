@@ -7,14 +7,19 @@ body {
     padding: 0;
 }
 
+@font-face {
+    font-family: "Minesweeper";
+    src: url("./public/fonts/mine-sweeper.ttf");
+}
+
 .cell {
     width: 2em;
     height: 2em;
+    font-family: "Minesweeper";
     background-color: lightgray;
     border-style: outset;
     border-width: 0.35em;
     transition: opacity 0.1s;
-    color: blue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,7 +31,6 @@ body {
     background-color: rgb(188, 188, 188);
     border-style: none;
     border: 0.1em solid darkgray;
-    color: blue;
 }
 
 .cell.flag {
