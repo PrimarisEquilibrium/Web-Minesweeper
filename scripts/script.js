@@ -88,7 +88,11 @@ class Cell {
                 } else {
                     this.board.flagCount++
                 }
-                this.cellDiv.classList.toggle("flag")
+
+                const flagImg = document.createElement("img")
+                flagImg.src = "./public/images/flag.svg"
+                this.cellDiv.appendChild(flagImg)
+                
                 this.flagged = !this.flagged
                 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
                 if (board.hasWon()) {
