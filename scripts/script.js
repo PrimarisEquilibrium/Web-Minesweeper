@@ -74,13 +74,6 @@ class Cell {
             // Stop the "game" (input) by not reacting to inputs
             if (this.board.gameOver) return
 
-            // Display all bombs and toggle gameover when bomb is clicked
-            if (this.value == "bomb") {
-                document.getElementById("win-status").textContent = "You lost!"
-                this.board.displayBombs()
-                this.board.gameOver = true
-            }
-
             // On right click
             if ((e.which === 3 || e.button === 2) && !this.activated) {
                 if (this.flagged) {
@@ -102,8 +95,15 @@ class Cell {
                 }
             // On left click
             } else {
-                this.board.floodFill(this)
-                this.activateCell()
+                // Display all bombs and toggle gameover when bomb is clicked
+                if (this.value == "bomb") {
+                    document.getElementById("win-status").textContent = "You lost!"
+                    this.board.displayBombs()
+                    this.board.gameOver = true
+                } else {
+                    this.board.floodFill(this)
+                    this.activateCell()
+                }
             }
         })
         return cellDiv
