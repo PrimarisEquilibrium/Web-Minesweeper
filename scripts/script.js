@@ -83,15 +83,17 @@ class Cell {
 
             // On right click
             if ((e.which === 3 || e.button === 2) && !this.activated) {
-                if (this.cellDiv.classList.contains("flag")) {
+                if (this.flagged) {
+                    const flagImg = document.getElementById("flag-img")
+                    this.cellDiv.removeChild(flagImg)
                     this.board.flagCount--
                 } else {
+                    const flagImg = document.createElement("img")
+                    flagImg.id = "flag-img"
+                    flagImg.src = "./public/images/flag.svg"
+                    this.cellDiv.appendChild(flagImg)
                     this.board.flagCount++
                 }
-
-                const flagImg = document.createElement("img")
-                flagImg.src = "./public/images/flag.svg"
-                this.cellDiv.appendChild(flagImg)
                 
                 this.flagged = !this.flagged
                 document.getElementById("bomb-count").textContent = `Bombs Remaining: ${this.board.bombCount - this.board.flagCount}`
